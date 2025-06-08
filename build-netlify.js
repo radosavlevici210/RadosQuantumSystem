@@ -1,3 +1,4 @@
+
 const { execSync } = require('child_process');
 const { existsSync, mkdirSync, writeFileSync } = require('fs');
 const { join } = require('path');
@@ -31,26 +32,29 @@ try {
   writeFileSync(join('dist', '_redirects'), redirectsContent);
   console.log('✅ Created redirect rules for SPA routing');
 
-  // Create netlify.toml for production settings
-  const netlifyConfig = `[build]
-  publish = "dist"
-  command = "npm run build:netlify"
+  // Create production build info
+  const buildInfo = {
+    timestamp: new Date().toISOString(),
+    version: '3.0.0-ENTERPRISE',
+    build: 'PRODUCTION-8M-FEATURES',
+    deployment: 'NETLIFY',
+    author: 'Ervin Remus Radosavlevici',
+    emails: [
+      'ervin210@sky.com',
+      'radosavlevici.ervin@gmail.com',
+      'ervin210@icloud.com'
+    ],
+    url: 'https://radosquantum.netlify.app',
+    features: 'ALL_ENABLED',
+    restrictions: 'REMOVED'
+  };
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[build.environment]
-  NODE_ENV = "production"
-  VITE_APP_ENV = "production"
-`;
-
-  writeFileSync('netlify.toml', netlifyConfig);
-  console.log('✅ Created Netlify configuration');
+  writeFileSync(join('dist', 'build-info.json'), JSON.stringify(buildInfo, null, 2));
+  console.log('✅ Created production build configuration');
 
   console.log('🎉 Build completed successfully!');
   console.log('📁 Files ready in dist/ directory');
+  console.log('🌐 Ready for deployment to https://radosquantum.netlify.app');
 
 } catch (error) {
   console.error('❌ Build failed:', error.message);
