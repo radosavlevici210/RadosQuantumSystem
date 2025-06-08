@@ -1,6 +1,6 @@
 [build]
   publish = "dist"
-  command = "vite build --outDir dist && cp _redirects dist/"
+  command = "node build-netlify.js"
 
 [build.environment]
   NODE_VERSION = "20"
