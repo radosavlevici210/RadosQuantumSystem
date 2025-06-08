@@ -1,12 +1,3 @@
-
-#!/usr/bin/env node
-
-/**
- * RADOS Quantum System - Netlify Build Script
- * © 2025 Ervin Remus Radosavlevici
- * All Rights Reserved
- */
-
 const { execSync } = require('child_process');
 const { existsSync, mkdirSync, writeFileSync } = require('fs');
 const { join } = require('path');
@@ -40,44 +31,26 @@ try {
   writeFileSync(join('dist', '_redirects'), redirectsContent);
   console.log('✅ Created redirect rules for SPA routing');
 
-  // Get git information for deployment tracking
-  let gitInfo = {};
-  try {
-    const gitCommit = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    const gitBranch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
-    const gitMessage = execSync('git log -1 --pretty=%B', { encoding: 'utf8' }).trim();
-    gitInfo = { commit: gitCommit, branch: gitBranch, message: gitMessage };
-    console.log('📊 Git info captured for deployment tracking');
-  } catch (error) {
-    console.log('⚠️ Git info not available, initializing repository...');
-    try {
-      execSync('git init', { stdio: 'inherit' });
-      execSync('git add .', { stdio: 'inherit' });
-      execSync('git commit -m "Initial RADOS Quantum System deployment"', { stdio: 'inherit' });
-      console.log('✅ Git repository initialized');
-    } catch (gitError) {
-      console.log('ℹ️ Git initialization skipped');
-    }
-  }
+  // Create netlify.toml for production settings
+  const netlifyConfig = `[build]
+  publish = "dist"
+  command = "npm run build:netlify"
 
-  // Create environment-specific configuration
-  const netlifyConfig = {
-    timestamp: new Date().toISOString(),
-    version: '3.0.0-ENTERPRISE',
-    build: 'PRODUCTION-8M-FEATURES',
-    deployment: 'NETLIFY',
-    author: 'Ervin Remus Radosavlevici',
-    emails: ['ervin210@sky.com', 'radosavlevici.ervin@gmail.com', 'ervin210@icloud.com'],
-    git: gitInfo,
-    url: 'https://radosquantum.netlify.app'
-  };
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
-  // Write build info
-  writeFileSync(join('dist', 'build-info.json'), JSON.stringify(netlifyConfig, null, 2));
-  console.log('✅ Created build configuration');
+[build.environment]
+  NODE_ENV = "production"
+  VITE_APP_ENV = "production"
+`;
 
-  console.log('✅ RADOS Quantum System build completed successfully!');
-  console.log('🌐 Ready for deployment to https://radosquantum.netlify.app');
+  writeFileSync('netlify.toml', netlifyConfig);
+  console.log('✅ Created Netlify configuration');
+
+  console.log('🎉 Build completed successfully!');
+  console.log('📁 Files ready in dist/ directory');
 
 } catch (error) {
   console.error('❌ Build failed:', error.message);

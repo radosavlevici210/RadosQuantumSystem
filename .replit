@@ -43,3 +43,16 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm run build:netlify"
+
+[[workflows.workflow]]
+name = "Deploy to Production"
+author = 43625483
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "rm -f .git/index.lock"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build:netlify"
