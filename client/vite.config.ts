@@ -20,7 +20,7 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           query: ['@tanstack/react-query'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-toast', '@radix-ui/react-tooltip', '@radix-ui/react-accordion', '@radix-ui/react-alert-dialog'],
-          radix: ['@radix-ui/react-avatar', '@radix-ui/react-button', '@radix-ui/react-card', '@radix-ui/react-checkbox'],
+          radix: ['@radix-ui/react-avatar', '@radix-ui/react-checkbox'],
           quantum: ['wouter', 'framer-motion'],
           utils: ['clsx', 'class-variance-authority', 'tailwind-merge'],
         },
