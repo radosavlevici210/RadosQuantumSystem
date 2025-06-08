@@ -1,10 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import App from './App'
-import './index.css'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import { PerformanceMonitor } from "./lib/performance";
 
-// Display system info
+// RADOS Quantum System Boot Sequence
 console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║                  RADOS QUANTUM SYSTEM                       ║
@@ -20,19 +20,28 @@ console.log(`
 ╚══════════════════════════════════════════════════════════════╝
 `);
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      refetchOnWindowFocus: false,
-    },
-  },
-})
+// Initialize performance monitoring
+const perfMonitor = PerformanceMonitor.getInstance();
+perfMonitor.startTiming('app_initialization');
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>,
-)
+// Register service worker for production
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('🔧 Service Worker registered:', registration);
+      })
+      .catch((error) => {
+        console.log('❌ Service Worker registration failed:', error);
+      });
+  });
+}
+
+const container = document.getElementById("root");
+if (!container) throw new Error("Root container missing in index.html");
+
+const root = createRoot(container);
+root.render(<App />);
+
+// End timing after render
+perfMonitor.endTiming('app_initialization');
