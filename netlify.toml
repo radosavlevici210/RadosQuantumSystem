@@ -1,16 +1,18 @@
-
 [build]
+  command = "npm run build:netlify"
   publish = "dist"
-  command = "node build-netlify.js"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--prefix=client"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[functions]
+  node_bundler = "esbuild"
 
 [dev]
   command = "npm run dev"

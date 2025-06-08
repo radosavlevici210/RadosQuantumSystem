@@ -7,23 +7,14 @@
  * All Rights Reserved
  */
 
-import { execSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
-import { join } from 'path';
+const { execSync } = require('child_process');
+const { existsSync, mkdirSync, writeFileSync } = require('fs');
+const { join } = require('path');
 
 console.log('🚀 Starting RADOS Quantum System build for Netlify...');
 
 try {
-  // Update dependencies and fix vulnerabilities
-  console.log('🔧 Updating dependencies...');
-  execSync('npm audit fix --force', { stdio: 'inherit' });
-  execSync('cd client && npm audit fix --force', { stdio: 'inherit' });
-  
-  // Update browser data
-  console.log('🌐 Updating browser compatibility data...');
-  execSync('npx update-browserslist-db@latest', { stdio: 'inherit' });
-
-  // Clean and create dist directory
+  // Clean and create dist directory first
   console.log('🧹 Cleaning build directory...');
   if (existsSync('dist')) {
     execSync('rm -rf dist', { stdio: 'inherit' });
@@ -32,7 +23,9 @@ try {
 
   // Build the client application
   console.log('📦 Building static application...');
-  execSync('cd client && npm run build', { stdio: 'inherit' });
+  process.chdir('client');
+  execSync('npm run build', { stdio: 'inherit' });
+  process.chdir('..');
 
   // Copy redirect rules for SPA routing
   const redirectsContent = `/*    /index.html   200`;
