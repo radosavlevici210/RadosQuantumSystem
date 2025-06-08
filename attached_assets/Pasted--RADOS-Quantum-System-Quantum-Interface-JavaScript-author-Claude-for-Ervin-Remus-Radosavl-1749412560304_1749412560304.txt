@@ -1,0 +1,761 @@
+/**
+
+- RADOS Quantum System - Quantum Interface JavaScript
+- @author Claude for Ervin Remus Radosavlevici
+- @version 1.0.0
+- @description JavaScript implementation for the quantum computing interface
+  */
+
+// Main Quantum System class
+class QuantumSystem {
+constructor() {
+this.maxQubits = 250;
+this.currentQubits = 5;
+this.circuitDepth = 0;
+this.maxCircuitDepth = 250;
+this.operations = [];
+this.results = null;
+this.visualizer = new QuantumVisualizer();
+
+```
+    // Quantum state simulation (very simplified)
+    this.qubits = [];
+    
+    // Initialize system
+    this.initializeSystem();
+    this.bindEvents();
+}
+
+initializeSystem() {
+    console.log('Initializing Quantum System...');
+    // Initialize qubits in |0⟩ state
+    this.resetQubits();
+    
+    // Initialize circuit display
+    this.drawCircuit();
+}
+
+resetQubits() {
+    this.qubits = Array(this.currentQubits).fill().map(() => ({
+        state: '|0⟩',
+        probability: {0: 1, 1: 0},
+        entangled: false,
+        entangledWith: []
+    }));
+}
+
+updateQubitCount(count) {
+    this.currentQubits = count;
+    this.resetQubits();
+    this.drawCircuit();
+    console.log(`Qubit count updated to ${count}`);
+}
+
+applyOperation(operation, targetQubits = []) {
+    console.log(`Applying operation: ${operation} to qubits:`, targetQubits);
+    
+    // Record operation for circuit display
+    this.operations.push({
+        name: operation,
+        targets: targetQubits.slice(),
+        depth: this.circuitDepth++
+    });
+    
+    // Simulate operation effects on qubit states
+    switch(operation) {
+        case 'hadamard':
+            this.applyHadamard(targetQubits);
+            break;
+        case 'cnot':
+            this.applyCNOT(targetQubits);
+            break;
+        case 'qft':
+            this.applyQFT(targetQubits);
+            break;
+        case 'grover':
+            this.applyGrover(targetQubits);
+            break;
+        case 'shor':
+            this.applyShor(targetQubits);
+            break;
+        case 'bell_state':
+            this.createBellState(targetQubits);
+            break;
+        case 'teleportation':
+            this.simulateTeleportation(targetQubits);
+            break;
+        case 'superdense_coding':
+            this.simulateSuperdenseCoding(targetQubits);
+            break;
+        default:
+            console.warn(`Unknown operation: ${operation}`);
+    }
+    
+    // Update circuit and results
+    this.drawCircuit();
+    this.generateResults();
+}
+
+// Quantum operation simulations
+applyHadamard(targets) {
+    if (targets.length === 0) {
+        targets = [0]; // Default to first qubit if none specified
+    }
+    
+    targets.forEach(target => {
+        if (target >= 0 && target < this.qubits.length) {
+            // Simulate Hadamard gate - puts qubit in superposition
+            this.qubits[target].state = '|+⟩';
+            this.qubits[target].probability = {0: 0.5, 1: 0.5};
+        }
+    });
+}
+
+applyCNOT(targets) {
+    if (targets.length < 2) {
+        // Default to first two qubits if not enough specified
+        targets = [0, 1];
+    }
+    
+    const control = targets[0];
+    const target = targets[1];
+    
+    if (control >= 0 && control < this.qubits.length && 
+        target >= 0 && target < this.qubits.length) {
+        // Simulate CNOT gate - entangles qubits
+        this.qubits[control].entangled = true;
+        this.qubits[target].entangled = true;
+        this.qubits[control].entangledWith.push(target);
+        this.qubits[target].entangledWith.push(control);
+        
+        // Update state representation
+        this.qubits[control].state = '|Φ⟩';
+        this.qubits[target].state = '|Φ⟩';
+    }
+}
+
+applyQFT(targets) {
+    // Simplified QFT simulation
+    if (targets.length === 0) {
+        // If no targets specified, apply to all qubits
+        targets = Array.from({length: this.currentQubits}, (_, i) => i);
+    }
+    
+    targets.forEach(target => {
+        if (target >= 0 && target < this.qubits.length) {
+            this.qubits[target].state = '|QFT⟩';
+            // Complex probability distribution in real QFT
+            this.qubits[target].probability = {0: 0.3, 1: 0.7};
+        }
+    });
+}
+
+applyGrover(targets) {
+    // Simplified Grover's algorithm simulation
+    if (targets.length === 0) {
+        // If no targets specified, apply to first 3 qubits
+        const numTargets = Math.min(3, this.currentQubits);
+        targets = Array.from({length: numTargets}, (_, i) => i);
+    }
+    
+    // Apply Hadamard to all targets
+    this.applyHadamard(targets);
+    
+    // Simulate the quantum oracle and amplitude amplification
+    targets.forEach(target => {
+        if (target >= 0 && target < this.qubits.length) {
+            this.qubits[target].state = '|G⟩';
+            // Grover's amplifies the target state
+            this.qubits[target].probability = {0: 0.2, 1: 0.8};
+        }
+    });
+}
+
+applyShor(targets) {
+    // Simplified Shor's algorithm simulation
+    if (targets.length === 0) {
+        // Shor's requires many qubits
+        const numTargets = Math.min(7, this.currentQubits);
+        targets = Array.from({length: numTargets}, (_, i) => i);
+    }
+    
+    // First apply QFT-like transformation
+    this.applyQFT(targets);
+    
+    // Then simulate modular exponentiation
+    targets.forEach(target => {
+        if (target >= 0 && target < this.qubits.length) {
+            this.qubits[target].state = '|S⟩';
+            // Complex patterns in Shor's
+            this.qubits[target].probability = {0: 0.4, 1: 0.6};
+        }
+    });
+}
+
+createBellState(targets) {
+    if (targets.length < 2) {
+        // Default to first two qubits
+        targets = [0, 1];
+    }
+    
+    // Create Bell state: First Hadamard on control, then CNOT
+    this.applyHadamard([targets[0]]);
+    this.applyCNOT([targets[0], targets[1]]);
+    
+    // Update state to show proper Bell notation
+    if (targets[0] >= 0 && targets[0] < this.qubits.length && 
+        targets[1] >= 0 && targets[1] < this.qubits.length) {
+        this.qubits[targets[0]].state = '|Φ+⟩';
+        this.qubits[targets[1]].state = '|Φ+⟩';
+    }
+}
+
+simulateTeleportation(targets) {
+    if (targets.length < 3) {
+        // Need at least 3 qubits for teleportation
+        const numTargets = Math.min(3, this.currentQubits);
+        targets = Array.from({length: numTargets}, (_, i) => i);
+    }
+    
+    // First create Bell state between qubits 1 and 2
+    this.createBellState([targets[1], targets[2]]);
+    
+    // Simulate the rest of teleportation protocol
+    this.applyCNOT([targets[0], targets[1]]);
+    this.applyHadamard([targets[0]]);
+    
+    // Update final state - the state is "teleported" to the third qubit
+    if (targets[2] >= 0 && targets[2] < this.qubits.length) {
+        this.qubits[targets[2]].state = '|T⟩';
+        this.qubits[targets[2]].probability = {0: 0.5, 1: 0.5};
+    }
+}
+
+simulateSuperdenseCoding(targets) {
+    if (targets.length < 2) {
+        targets = [0, 1]; // Need at least 2 qubits
+    }
+    
+    // Create bell state first
+    this.createBellState(targets);
+    
+    // Simulate encoding operations
+    // (in real superdense coding, you'd apply X and/or Z gates to encode 2 bits)
+    if (targets[0] >= 0 && targets[0] < this.qubits.length) {
+        this.qubits[targets[0]].state = '|SC⟩';
+    }
+    
+    // Simulate decoding (CNOT and H)
+    this.applyCNOT(targets);
+    this.applyHadamard([targets[0]]);
+}
+
+drawCircuit() {
+    const circuitElem = document.getElementById('quantum-circuit');
+    if (!circuitElem) return;
+    
+    // Create circuit visualization
+    this.visualizer.drawCircuit(circuitElem, this.qubits, this.operations);
+}
+
+generateResults() {
+    const resultsElem = document.getElementById('results-visualization');
+    if (!resultsElem) return;
+    
+    // Generate visualization of current quantum state
+    this.visualizer.drawResults(resultsElem, this.qubits);
+}
+
+saveCircuit() {
+    // Save current circuit configuration
+    const savedData = {
+        qubits: this.currentQubits,
+        operations: this.operations,
+        timestamp: new Date().toISOString()
+    };
+    
+    localStorage.setItem('quantum_circuit', JSON.stringify(savedData));
+    alert('Circuit saved successfully!');
+}
+
+loadCircuit() {
+    // Load saved circuit
+    const savedData = localStorage.getItem('quantum_circuit');
+    if (!savedData) {
+        alert('No saved circuit found!');
+        return;
+    }
+    
+    try {
+        const data = JSON.parse(savedData);
+        this.operations = data.operations;
+        this.updateQubitCount(data.qubits);
+        this.resetQubits();
+        
+        // Re-apply operations to reconstruct state
+        this.circuitDepth = 0;
+        this.operations.forEach(op => {
+            this.applyOperation(op.name, op.targets);
+        });
+        
+        alert('Circuit loaded successfully!');
+    } catch (error) {
+        console.error('Error loading circuit:', error);
+        alert('Error loading circuit!');
+    }
+}
+
+bindEvents() {
+    // Bind UI events
+    const qubitCount = document.getElementById('qubit-count');
+    if (qubitCount) {
+        qubitCount.addEventListener('input', () => {
+            this.updateQubitCount(parseInt(qubitCount.value, 10));
+            document.getElementById('selected-qubit-count').textContent = qubitCount.value;
+            this.updateQubitDisplay();
+        });
+    }
+    
+    // Bind operation buttons
+    document.querySelectorAll('.quantum-operation-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const operation = button.getAttribute('data-operation');
+            
+            // For demo purposes, just use first few qubits based on operation
+            let targetQubits;
+            switch(operation) {
+                case 'hadamard':
+                    targetQubits = [0];
+                    break;
+                case 'cnot':
+                    targetQubits = [0, 1];
+                    break;
+                case 'bell_state':
+                    targetQubits = [0, 1];
+                    break;
+                case 'teleportation':
+                    targetQubits = [0, 1, 2];
+                    break;
+                case 'superdense_coding':
+                    targetQubits = [0, 1];
+                    break;
+                default:
+                    // For other operations, use first 3 qubits or all if less available
+                    const numTargets = Math.min(3, this.currentQubits);
+                    targetQubits = Array.from({length: numTargets}, (_, i) => i);
+            }
+            
+            this.applyOperation(operation, targetQubits);
+        });
+    });
+    
+    // Bind save/load buttons
+    const saveBtn = document.querySelector('.btn-outline-primary');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => this.saveCircuit());
+    }
+    
+    const loadBtn = document.querySelector('.btn-outline-secondary');
+    if (loadBtn) {
+        loadBtn.addEventListener('click', () => this.loadCircuit());
+    }
+}
+
+updateQubitDisplay() {
+    const display = document.getElementById('qubit-display');
+    if (!display) return;
+    
+    display.innerHTML = '';
+    for (let i = 0; i < this.currentQubits; i++) {
+        const qubit = document.createElement('div');
+        qubit.className = 'qubit';
+        qubit.textContent = i + 1;
+        display.appendChild(qubit);
+    }
+}
+```
+
+}
+
+// Class for visualizing quantum states and circuits
+class QuantumVisualizer {
+constructor() {
+// Color schemes for different quantum states
+this.stateColors = {
+‘|0⟩’: ‘#0072CE’,
+‘|1⟩’: ‘#D81B60’,
+‘|+⟩’: ‘#8A2BE2’,
+‘|-⟩’: ‘#673AB7’,
+‘|Φ⟩’: ‘#FFC107’,
+‘|Φ+⟩’: ‘#FF9800’,
+‘|QFT⟩’: ‘#4CAF50’,
+‘|G⟩’: ‘#2196F3’,
+‘|S⟩’: ‘#009688’,
+‘|T⟩’: ‘#E91E63’,
+‘|SC⟩’: ‘#00BCD4’
+};
+}
+
+```
+drawCircuit(container, qubits, operations) {
+    // Clear previous circuit
+    container.innerHTML = '';
+    
+    // Create circuit visualization
+    const circuitTable = document.createElement('table');
+    circuitTable.className = 'table table-bordered';
+    circuitTable.style.tableLayout = 'fixed';
+    
+    // Create header row for time steps
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = '<th style="width: 80px;">Qubit</th>';
+    
+    // Find max depth
+    const maxDepth = operations.length > 0 
+        ? Math.max(...operations.map(op => op.depth)) + 1 
+        : 5;
+    
+    // Add time step headers
+    for (let i = 0; i < maxDepth; i++) {
+        const th = document.createElement('th');
+        th.textContent = `t${i}`;
+        headerRow.appendChild(th);
+    }
+    
+    circuitTable.appendChild(headerRow);
+    
+    // Create row for each qubit
+    for (let i = 0; i < qubits.length; i++) {
+        const qubitRow = document.createElement('tr');
+        
+        // Create qubit label cell
+        const qubitLabelCell = document.createElement('td');
+        qubitLabelCell.innerHTML = `<strong>Q${i}</strong><br><small>${qubits[i].state}</small>`;
+        qubitLabelCell.style.backgroundColor = this.stateColors[qubits[i].state] || '#0072CE';
+        qubitLabelCell.style.color = 'white';
+        qubitLabelCell.style.textAlign = 'center';
+        qubitLabelCell.style.verticalAlign = 'middle';
+        
+        qubitRow.appendChild(qubitLabelCell);
+        
+        // Create cells for each time step
+        for (let j = 0; j < maxDepth; j++) {
+            const stepCell = document.createElement('td');
+            
+            // Check if any operation applies to this qubit at this time step
+            const op = operations.find(op => op.depth === j && op.targets.includes(i));
+            if (op) {
+                stepCell.textContent = this.getGateSymbol(op.name);
+                stepCell.style.backgroundColor = this.getGateColor(op.name);
+                stepCell.style.color = 'white';
+                stepCell.style.textAlign = 'center';
+                stepCell.style.fontWeight = 'bold';
+                
+                // Add connecting lines for multi-qubit gates
+                if (['cnot', 'bell_state', 'teleportation', 'superdense_coding'].includes(op.name) && 
+                    op.targets.indexOf(i) > 0) {
+                    stepCell.style.borderTop = '2px dashed #FFC107';
+                }
+            } else {
+                // Empty cell with horizontal line representing qubit wire
+                stepCell.innerHTML = '<div style="border-top: 2px solid #ccc; height: 50%; margin-top: 12px;"></div>';
+            }
+            
+            qubitRow.appendChild(stepCell);
+        }
+        
+        circuitTable.appendChild(qubitRow);
+    }
+    
+    container.appendChild(circuitTable);
+}
+
+getGateSymbol(operation) {
+    switch(operation) {
+        case 'hadamard': return 'H';
+        case 'cnot': return '⊕';
+        case 'qft': return 'QFT';
+        case 'grover': return 'G';
+        case 'shor': return 'S';
+        case 'bell_state': return 'B';
+        case 'teleportation': return 'T';
+        case 'superdense_coding': return 'SC';
+        default: return '?';
+    }
+}
+
+getGateColor(operation) {
+    switch(operation) {
+        case 'hadamard': return '#8A2BE2';
+        case 'cnot': return '#FFC107';
+        case 'qft': return '#4CAF50';
+        case 'grover': return '#2196F3';
+        case 'shor': return '#009688';
+        case 'bell_state': return '#FF9800';
+        case 'teleportation': return '#E91E63';
+        case 'superdense_coding': return '#00BCD4';
+        default: return '#0072CE';
+    }
+}
+
+drawResults(container, qubits) {
+    // Clear previous results except for the title
+    const resultsTitle = container.querySelector('.results-title');
+    container.innerHTML = '';
+    container.appendChild(resultsTitle);
+    
+    // Create visualization container
+    const visualizationDiv = document.createElement('div');
+    visualizationDiv.className = 'row';
+    
+    // State vector visualization
+    const stateVectorDiv = document.createElement('div');
+    stateVectorDiv.className = 'col-md-6';
+    
+    const stateVectorTitle = document.createElement('h6');
+    stateVectorTitle.textContent = 'Quantum State';
+    stateVectorDiv.appendChild(stateVectorTitle);
+    
+    // Create state visualization
+    const stateDisplay = document.createElement('div');
+    stateDisplay.className = 'd-flex flex-wrap gap-2 mb-4';
+    
+    qubits.forEach((qubit, index) => {
+        const qubitStateDiv = document.createElement('div');
+        qubitStateDiv.className = 'p-3 rounded';
+        qubitStateDiv.style.backgroundColor = this.stateColors[qubit.state] || '#0072CE';
+        qubitStateDiv.style.color = 'white';
+        qubitStateDiv.style.width = '80px';
+        qubitStateDiv.style.textAlign = 'center';
+        
+        qubitStateDiv.innerHTML = `<strong>Q${index}</strong><br>${qubit.state}`;
+        
+        stateDisplay.appendChild(qubitStateDiv);
+    });
+    
+    stateVectorDiv.appendChild(stateDisplay);
+    
+    // Create state vector equation
+    const equationDiv = document.createElement('div');
+    equationDiv.className = 'mb-4 p-3 bg-light rounded';
+    
+    let stateEquation = '|ψ⟩ = ';
+    
+    // Group entangled qubits
+    const entangledGroups = [];
+    const processedQubits = new Set();
+    
+    qubits.forEach((qubit, index) => {
+        if (processedQubits.has(index)) return;
+        
+        if (qubit.entangled && qubit.entangledWith.length > 0) {
+            const group = [index, ...qubit.entangledWith.filter(q => q !== index)];
+            entangledGroups.push(group);
+            group.forEach(q => processedQubits.add(q));
+        } else {
+            entangledGroups.push([index]);
+            processedQubits.add(index);
+        }
+    });
+    
+    // Generate equation terms
+    entangledGroups.forEach((group, groupIndex) => {
+        if (groupIndex > 0) stateEquation += ' ⊗ ';
+        
+        if (group.length === 1) {
+            // Single qubit
+            const idx = group[0];
+            const state = qubits[idx].state;
+            
+            if (state === '|+⟩') {
+                stateEquation += '(|0⟩ + |1⟩)/√2';
+            } else if (state === '|-⟩') {
+                stateEquation += '(|0⟩ - |1⟩)/√2';
+            } else if (state === '|QFT⟩' || state === '|G⟩' || state === '|S⟩') {
+                stateEquation += `${state}`;
+            } else {
+                stateEquation += state;
+            }
+        } else {
+            // Entangled qubits
+            if (qubits[group[0]].state === '|Φ+⟩') {
+                stateEquation += '(|00⟩ + |11⟩)/√2';
+            } else if (qubits[group[0]].state === '|T⟩') {
+                stateEquation += '|T⟩'; // Teleported state
+            } else if (qubits[group[0]].state === '|SC⟩') {
+                stateEquation += '|SC⟩'; // Superdense coding state
+            } else {
+                stateEquation += '|Φ⟩'; // Generic entangled state
+            }
+        }
+    });
+    
+    equationDiv.textContent = stateEquation;
+    stateVectorDiv.appendChild(equationDiv);
+    
+    // Probability visualization
+    const probDiv = document.createElement('div');
+    probDiv.className = 'col-md-6';
+    
+    const probTitle = document.createElement('h6');
+    probTitle.textContent = 'Measurement Probabilities';
+    probDiv.appendChild(probTitle);
+    
+    // Create probability bars
+    qubits.forEach((qubit, index) => {
+        const qubitProbDiv = document.createElement('div');
+        qubitProbDiv.className = 'mb-3';
+        
+        const qubitLabel = document.createElement('div');
+        qubitLabel.className = 'mb-1';
+        qubitLabel.innerHTML = `<strong>Qubit ${index}</strong> (${qubit.state})`;
+        qubitProbDiv.appendChild(qubitLabel);
+        
+        const probContainer = document.createElement('div');
+        probContainer.className = 'd-flex mb-2';
+        
+        // |0⟩ probability bar
+        const prob0 = qubit.probability['0'] || 0;
+        const prob0Div = document.createElement('div');
+        prob0Div.className = 'p-2 text-center text-white';
+        prob0Div.style.backgroundColor = '#0072CE';
+        prob0Div.style.width = `${prob0 * 100}%`;
+        if (prob0 > 0.1) prob0Div.textContent = `|0⟩: ${Math.round(prob0 * 100)}%`;
+        
+        // |1⟩ probability bar
+        const prob1 = qubit.probability['1'] || 0;
+        const prob1Div = document.createElement('div');
+        prob1Div.className = 'p-2 text-center text-white';
+        prob1Div.style.backgroundColor = '#D81B60';
+        prob1Div.style.width = `${prob1 * 100}%`;
+        if (prob1 > 0.1) prob1Div.textContent = `|1⟩: ${Math.round(prob1 * 100)}%`;
+        
+        probContainer.appendChild(prob0Div);
+        probContainer.appendChild(prob1Div);
+        qubitProbDiv.appendChild(probContainer);
+        
+        probDiv.appendChild(qubitProbDiv);
+    });
+    
+    visualizationDiv.appendChild(stateVectorDiv);
+    visualizationDiv.appendChild(probDiv);
+    container.appendChild(visualizationDiv);
+    
+    // Add measurement simulation button
+    const measureBtn = document.createElement('button');
+    measureBtn.className = 'btn btn-primary mt-3';
+    measureBtn.textContent = 'Simulate Measurement';
+    
+    measureBtn.addEventListener('click', () => {
+        this.simulateMeasurement(container, qubits);
+    });
+    
+    container.appendChild(measureBtn);
+}
+
+simulateMeasurement(container, qubits) {
+    // Create a new div for measurement results
+    const measurementDiv = document.createElement('div');
+    measurementDiv.className = 'mt-4 p-3 border rounded bg-light';
+    
+    const measurementTitle = document.createElement('h6');
+    measurementTitle.textContent = 'Measurement Result';
+    measurementDiv.appendChild(measurementTitle);
+    
+    // Simulate measurement for each qubit
+    const resultDiv = document.createElement('div');
+    resultDiv.className = 'd-flex flex-wrap gap-3 mt-3';
+    
+    let measurementString = '|';
+    
+    // Find entangled groups for consistent measurement
+    const entangledGroups = [];
+    const processedQubits = new Set();
+    
+    qubits.forEach((qubit, index) => {
+        if (processedQubits.has(index)) return;
+        
+        if (qubit.entangled && qubit.entangledWith.length > 0) {
+            const group = [index, ...qubit.entangledWith.filter(q => q !== index)];
+            entangledGroups.push(group);
+            group.forEach(q => processedQubits.add(q));
+        } else {
+            entangledGroups.push([index]);
+            processedQubits.add(index);
+        }
+    });
+    
+    // Measure each group
+    entangledGroups.forEach(group => {
+        let result;
+        
+        if (group.length === 1) {
+            // Single qubit measurement
+            const qubit = qubits[group[0]];
+            result = this.simulateSingleMeasurement(qubit.probability);
+        } else {
+            // Entangled qubits - results will be correlated
+            const qubit = qubits[group[0]];
+            if (qubit.state === '|Φ+⟩') {
+                // Bell state gives correlated results
+                result = Math.random() < 0.5 ? '0'.repeat(group.length) : '1'.repeat(group.length);
+            } else {
+                // Other entangled states - simplified
+                result = Math.random() < 0.5 ? '0'.repeat(group.length) : '1'.repeat(group.length);
+            }
+        }
+        
+        // Add to measurement string with proper spacing
+        measurementString += result;
+    });
+    
+    measurementString += '⟩';
+    
+    // Create visual representation of measurement
+    qubits.forEach((qubit, index) => {
+        const measured = measurementString.charAt(index + 1);
+        
+        const qubitResultDiv = document.createElement('div');
+        qubitResultDiv.className = 'p-3 rounded';
+        qubitResultDiv.style.backgroundColor = measured === '0' ? '#0072CE' : '#D81B60';
+        qubitResultDiv.style.color = 'white';
+        qubitResultDiv.style.width = '60px';
+        qubitResultDiv.style.textAlign = 'center';
+        
+        qubitResultDiv.innerHTML = `<strong>Q${index}</strong><br>|${measured}⟩`;
+        
+        resultDiv.appendChild(qubitResultDiv);
+    });
+    
+    // Add the full state notation
+    const stateNotationDiv = document.createElement('div');
+    stateNotationDiv.className = 'mt-3 text-center';
+    stateNotationDiv.innerHTML = `<strong>Measured State:</strong> ${measurementString}`;
+    
+    measurementDiv.appendChild(resultDiv);
+    measurementDiv.appendChild(stateNotationDiv);
+    
+    // Add to container
+    container.appendChild(measurementDiv);
+}
+
+simulateSingleMeasurement(probabilities) {
+    const rand = Math.random();
+    return rand < (probabilities['0'] || 0.5) ? '0' : '1';
+}
+```
+
+}
+
+// Initialize the quantum system when DOM is loaded
+document.addEventListener(‘DOMContentLoaded’, function() {
+window.quantumSystem = new QuantumSystem();
+
+```
+// Initialize feather icons if available
+if (typeof feather !== 'undefined') {
+    feather.replace();
+}
+```
+
+});
