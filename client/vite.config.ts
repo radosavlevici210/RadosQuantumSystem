@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -19,11 +20,21 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', '@tanstack/react-query'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-toast', '@radix-ui/react-tooltip'],
+          quantum: ['wouter', 'framer-motion'],
         },
       },
     },
     sourcemap: false,
-    minify: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: false, // Keep console logs for quantum system
+        drop_debugger: true,
+      },
+    },
   },
   base: '/',
+  define: {
+    'process.env.NODE_ENV': '"production"',
+  },
 });

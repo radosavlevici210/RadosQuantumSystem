@@ -1,3 +1,4 @@
+
 #!/usr/bin/env node
 
 /**
@@ -7,33 +8,27 @@
  */
 
 import { execSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
 console.log('🚀 Starting RADOS Quantum System build for Netlify...');
 
 try {
-  // Build the application as static client-only
-  console.log('📦 Building static application...');
-  execSync('cd client && vite build --outDir ../dist', { stdio: 'inherit' });
-
-  // Ensure dist directory exists
-  if (!existsSync('dist')) {
-    mkdirSync('dist', { recursive: true });
+  // Clean and create dist directory
+  console.log('🧹 Cleaning build directory...');
+  if (existsSync('dist')) {
+    execSync('rm -rf dist', { stdio: 'inherit' });
   }
+  mkdirSync('dist', { recursive: true });
+
+  // Build the client application
+  console.log('📦 Building static application...');
+  execSync('cd client && npm run build', { stdio: 'inherit' });
 
   // Copy redirect rules for SPA routing
-  if (existsSync('client/public/_redirects')) {
-    copyFileSync('client/public/_redirects', join('dist', '_redirects'));
-    console.log('✅ Copied redirect rules');
-  } else if (existsSync('_redirects')) {
-    copyFileSync('_redirects', join('dist', '_redirects'));
-    console.log('✅ Copied redirect rules');
-  }
+  const redirectsContent = `/*    /index.html   200`;
+  writeFileSync(join('dist', '_redirects'), redirectsContent);
+  console.log('✅ Created redirect rules for SPA routing');
 
   // Create environment-specific configuration
   const netlifyConfig = {
@@ -46,7 +41,8 @@ try {
   };
 
   // Write build info
-  execSync(`echo '${JSON.stringify(netlifyConfig, null, 2)}' > dist/build-info.json`, { stdio: 'inherit' });
+  writeFileSync(join('dist', 'build-info.json'), JSON.stringify(netlifyConfig, null, 2));
+  console.log('✅ Created build configuration');
 
   console.log('✅ RADOS Quantum System build completed successfully!');
   console.log('🌐 Ready for deployment to https://radosquantum.netlify.app');

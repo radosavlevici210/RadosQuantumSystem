@@ -1,9 +1,11 @@
+
 [build]
   publish = "dist"
   command = "node build-netlify.js"
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--prefix=client"
 
 [[redirects]]
   from = "/*"
@@ -22,7 +24,7 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://replit.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' wss: ws:;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://replit.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' wss: ws: https:;"
 
 [[headers]]
   for = "/assets/*"
@@ -36,5 +38,10 @@
 
 [[headers]]
   for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff2"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
