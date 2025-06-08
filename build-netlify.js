@@ -17,9 +17,9 @@ const __dirname = dirname(__filename);
 console.log('🚀 Starting RADOS Quantum System build for Netlify...');
 
 try {
-  // Build the application
-  console.log('📦 Building application...');
-  execSync('vite build --outDir dist', { stdio: 'inherit' });
+  // Build the application as static client-only
+  console.log('📦 Building static application...');
+  execSync('cd client && vite build --outDir ../dist', { stdio: 'inherit' });
 
   // Ensure dist directory exists
   if (!existsSync('dist')) {
@@ -27,7 +27,10 @@ try {
   }
 
   // Copy redirect rules for SPA routing
-  if (existsSync('_redirects')) {
+  if (existsSync('client/public/_redirects')) {
+    copyFileSync('client/public/_redirects', join('dist', '_redirects'));
+    console.log('✅ Copied redirect rules');
+  } else if (existsSync('_redirects')) {
     copyFileSync('_redirects', join('dist', '_redirects'));
     console.log('✅ Copied redirect rules');
   }
