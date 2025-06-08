@@ -45,3 +45,13 @@ root.render(<App />);
 
 // End timing after render
 perfMonitor.endTiming('app_initialization');
+
+// Ensure base URL is set correctly for production
+if (import.meta.env.PROD) {
+  const base = document.querySelector('base');
+  if (!base) {
+    const baseTag = document.createElement('base');
+    baseTag.href = '/';
+    document.head.appendChild(baseTag);
+  }
+}

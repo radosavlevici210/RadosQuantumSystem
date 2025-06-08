@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "tsx server/index.ts",
     "build": "npm run build:client && npm run build:server",
-    "build:client": "cd client && npm run build",
+    "build:client": "cd client && npm install && npm run build",
     "build:server": "tsc server/index.ts --outDir dist --target es2022 --module nodenext --moduleResolution nodenext",
-    "build:netlify": "node build-netlify.js",
+    "build:netlify": "npm install && cd client && npm install && cd .. && node build-netlify.js",
     "start": "node dist/index.js"
   },
   "dependencies": {

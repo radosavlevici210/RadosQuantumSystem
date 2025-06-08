@@ -27,6 +27,14 @@ try {
   execSync('npm run build', { stdio: 'inherit' });
   process.chdir('..');
 
+  // Ensure client dist exists and copy it
+  const clientDist = join('client', 'dist');
+  if (existsSync(clientDist)) {
+    execSync(`cp -r ${clientDist}/* dist/`, { stdio: 'inherit' });
+  } else {
+    throw new Error('Client build failed - dist directory not found');
+  }
+
   // Copy redirect rules for SPA routing
   const redirectsContent = `/*    /index.html   200`;
   writeFileSync(join('dist', '_redirects'), redirectsContent);
