@@ -8,15 +8,15 @@ import { PerformanceMonitor } from "./lib/performance";
 console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║                  RADOS QUANTUM SYSTEM                       ║
-║              Enterprise Production Edition                   ║
+║              UNLIMITED PRODUCTION EDITION                   ║
 ║                                                              ║
 ║  © 2025 Ervin Remus Radosavlevici                           ║
 ║  Emails: ervin210@sky.com, radosavlevici.ervin@gmail.com,   ║
 ║          ervin210@icloud.com                                 ║
-║  All Rights Reserved - Unauthorized Use Prohibited          ║
+║  All Rights Reserved - Unlimited Production Mode            ║
 ║                                                              ║
-║  Version: 3.0.0-ENTERPRISE                                  ║
-║  Build: PRODUCTION-8M-FEATURES                              ║
+║  Version: 4.0.0-UNLIMITED                                   ║
+║  Build: NETLIFY-PRODUCTION-UNLIMITED                        ║
 ╚══════════════════════════════════════════════════════════════╝
 `);
 
@@ -37,9 +37,11 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
   });
 }
 
-// Production mode - all features enabled
-console.log('🌐 Production deployment ready for https://radosquantum.netlify.app');
-console.log('✅ All development restrictions removed');
+// UNLIMITED PRODUCTION MODE - ALL FEATURES ENABLED
+console.log('🌐 UNLIMITED Production deployment ready for https://radosquantum.netlify.app');
+console.log('✅ ALL development restrictions COMPLETELY removed');
+console.log('🚀 UNLIMITED quantum computing features enabled');
+console.log('⚡ Enterprise features: UNLIMITED ACCESS');
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container missing in index.html");

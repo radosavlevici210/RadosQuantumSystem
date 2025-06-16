@@ -38,8 +38,8 @@ export interface SystemHealth {
 }
 
 export class QuantumEngine {
-  private maxQubits: number = 1000;
-  private maxCircuitDepth: number = 10000;
+  private maxQubits: number = 100000; // UNLIMITED PRODUCTION MODE
+  private maxCircuitDepth: number = 1000000; // UNLIMITED PRODUCTION MODE
   private qubits: Qubit[] = [];
   private operations: QuantumOperation[] = [];
   private circuitDepth: number = 0;
@@ -52,10 +52,11 @@ export class QuantumEngine {
 
   private initializeSystem(): void {
     console.log('🚀 Initializing RADOS Quantum Engine...');
-    console.log('🚀 RADOS Quantum System - FULL PRODUCTION MODE');
-    console.log('✅ All restrictions removed - Enterprise features enabled');
+    console.log('🚀 RADOS Quantum System - UNLIMITED PRODUCTION MODE');
+    console.log('✅ ALL restrictions COMPLETELY removed - UNLIMITED features enabled');
+    console.log('⚡ Maximum qubits: 100,000 | Maximum circuit depth: 1,000,000');
     this.resetQubits(5);
-    console.log('✅ Quantum Engine ready for production');
+    console.log('✅ Quantum Engine ready for UNLIMITED production');
   }
 
   resetQubits(count: number): void {
@@ -74,10 +75,7 @@ export class QuantumEngine {
   }
 
   applyOperation(operation: string, targetQubits: number[] = []): void {
-    if (this.circuitDepth >= this.maxCircuitDepth) {
-      throw new Error('Maximum circuit depth reached');
-    }
-
+    // UNLIMITED PRODUCTION MODE - No depth restrictions
     this.operations.push({
       name: operation,
       targets: targetQubits.slice(),

@@ -32,12 +32,14 @@ try {
   writeFileSync(join('dist', '_redirects'), redirectsContent);
   console.log('✅ Created redirect rules for SPA routing');
 
-  // Create production build info
+  // Create production build info - FULL PRODUCTION MODE
   const buildInfo = {
     timestamp: new Date().toISOString(),
-    version: '3.0.0-ENTERPRISE',
-    build: 'PRODUCTION-8M-FEATURES',
+    version: '4.0.0-UNLIMITED',
+    build: 'NETLIFY-PRODUCTION-UNLIMITED',
     deployment: 'NETLIFY',
+    mode: 'PRODUCTION',
+    environment: 'PRODUCTION',
     author: 'Ervin Remus Radosavlevici',
     emails: [
       'ervin210@sky.com',
@@ -45,8 +47,13 @@ try {
       'ervin210@icloud.com'
     ],
     url: 'https://radosquantum.netlify.app',
-    features: 'ALL_ENABLED',
-    restrictions: 'REMOVED'
+    features: 'UNLIMITED_ENABLED',
+    restrictions: 'COMPLETELY_REMOVED',
+    development_mode: false,
+    production_mode: true,
+    all_features_enabled: true,
+    quantum_limits_removed: true,
+    enterprise_features: true
   };
 
   writeFileSync(join('dist', 'build-info.json'), JSON.stringify(buildInfo, null, 2));

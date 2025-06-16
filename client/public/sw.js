@@ -1,12 +1,13 @@
 
 /**
  * RADOS Quantum System - Service Worker
+ * UNLIMITED PRODUCTION MODE
  * © 2025 Ervin Remus Radosavlevici
  * All Rights Reserved
  */
 
-const CACHE_NAME = 'rados-quantum-v3.0.0';
-const STATIC_CACHE = 'rados-static-v3.0.0';
+const CACHE_NAME = 'rados-quantum-v4.0.0-unlimited';
+const STATIC_CACHE = 'rados-static-v4.0.0-unlimited';
 
 const STATIC_ASSETS = [
   '/',
