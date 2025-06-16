@@ -7,21 +7,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@shared": path.resolve(__dirname, "../shared"),
-      "@assets": path.resolve(__dirname, "../attached_assets"),
     },
   },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: false,
-    minify: 'esbuild',
-    target: 'esnext',
-    reportCompressedSize: false,
-    chunkSizeWarningLimit: 1000,
+    minify: false,
+    target: 'es2015',
   },
   base: '/',
-  define: {
-    'process.env.NODE_ENV': '"production"',
-  },
 });
