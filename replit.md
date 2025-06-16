@@ -116,7 +116,8 @@ The application offers a comprehensive quantum computing simulation environment 
 
 ## Changelog
 
-- June 16, 2025. Initial setup
+- June 16, 2025: Initial setup
+- June 16, 2025: Migration to Replit completed with business documentation (README.md, LICENSE, BUSINESS.md)
 
 ## User Preferences
 

@@ -1,21 +1,70 @@
-MIT License
+RADOS Quantum System - Business License
 
-Copyright (c) 2025 Ervin Remus Radosavlevici 
+Copyright © 2025 Ervin Remus Radosavlevici
+All Rights Reserved
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Contact Information:
+- Primary Email: ervin210@sky.com
+- Secondary Email: radosavlevici.ervin@gmail.com
+- Alternative Email: ervin210@icloud.com
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+PROPRIETARY SOFTWARE LICENSE
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+This software and associated documentation files (the "Software") are the exclusive 
+property of Ervin Remus Radosavlevici. This license grants no rights to copy, 
+distribute, modify, or use the Software except as expressly permitted below.
+
+PERMITTED USES:
+1. Evaluation and demonstration purposes for authorized users
+2. Production use at https://radosquantum.netlify.app/
+3. Internal business operations by the copyright holder
+4. Authorized enterprise deployments with explicit written permission
+
+RESTRICTIONS:
+1. No redistribution of source code or compiled binaries
+2. No reverse engineering, decompilation, or disassembly
+3. No modification or creation of derivative works
+4. No commercial use without explicit written authorization
+5. No sharing of access credentials or system capabilities
+
+ENTERPRISE FEATURES:
+- Unlimited quantum qubit capacity (up to 100,000 qubits)
+- Advanced quantum algorithms and circuit simulation
+- Enterprise-grade network management
+- Real-time analytics and monitoring
+- Quantum security protocols
+- Production-ready deployment capabilities
+
+INTELLECTUAL PROPERTY:
+All quantum algorithms, simulation methods, user interface designs, network 
+protocols, and system architecture are proprietary trade secrets and confidential 
+information of Ervin Remus Radosavlevici.
+
+WARRANTY DISCLAIMER:
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+LIMITATION OF LIABILITY:
+IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+IN THE SOFTWARE.
+
+TERMINATION:
+This license is effective until terminated. Your rights under this license will 
+terminate automatically without notice if you fail to comply with any term hereof.
+
+GOVERNING LAW:
+This license shall be governed by and construed in accordance with applicable 
+international intellectual property laws and regulations.
+
+For licensing inquiries, business partnerships, or commercial use authorization, 
+please contact Ervin Remus Radosavlevici at the email addresses listed above.
+
+---
+RADOS Quantum System
+Version: 4.0.0-UNLIMITED
+Build: NETLIFY-PRODUCTION-UNLIMITED
+Production URL: https://radosquantum.netlify.app/
+Last Updated: June 16, 2025
