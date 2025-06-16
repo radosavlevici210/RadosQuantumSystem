@@ -1,8 +1,11 @@
+import { useLocation } from 'wouter';
+
 interface QuantumSidebarProps {
   quantum: any;
 }
 
 export function QuantumSidebar({ quantum }: QuantumSidebarProps) {
+  const [location] = useLocation();
   return (
     <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col">
       {/* Logo Section */}
@@ -44,23 +47,23 @@ export function QuantumSidebar({ quantum }: QuantumSidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
-        <a href="#" className="flex items-center space-x-3 px-4 py-3 bg-quantum-indigo bg-opacity-20 text-quantum-teal rounded-lg quantum-glow">
+        <a href="/" className="flex items-center space-x-3 px-4 py-3 bg-quantum-indigo bg-opacity-20 text-quantum-teal rounded-lg quantum-glow">
           <i className="fas fa-project-diagram"></i>
           <span>Quantum Circuit</span>
         </a>
-        <a href="#" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+        <a href="/analytics" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
           <i className="fas fa-chart-line"></i>
           <span>Analytics</span>
         </a>
-        <a href="#" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+        <a href="/network" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
           <i className="fas fa-network-wired"></i>
           <span>Network</span>
         </a>
-        <a href="#" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+        <a href="/security" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
           <i className="fas fa-shield-alt"></i>
           <span>Security</span>
         </a>
-        <a href="#" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+        <a href="/settings" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
           <i className="fas fa-cogs"></i>
           <span>Settings</span>
         </a>
